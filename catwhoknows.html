@@ -40,9 +40,11 @@
         'lid',
       ];
 
+      const canvas = document.getElementById('catwhoknows');
+
       const rive1 = new rive.Rive({
         src: 'portfolio_game_dev.riv',
-        canvas: document.getElementById('catwhoknows'),
+        canvas: canvas,
         artboard: 'catwhoknows',
         stateMachines: ['State Machine 1'],
         autoplay: true,
