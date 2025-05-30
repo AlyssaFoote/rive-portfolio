@@ -29,14 +29,14 @@
     </style>
   </head>
   <body>
-    <canvas id="catwhoknows" width="500" height="500"></canvas>
+    <canvas id="catwhoknowsCanvas" width="500" height="500"></canvas>
 
     <script>
       let hoverInput;
 
       const riveInstance = new rive.Rive({
         src: 'portfolio_game_dev.riv',
-        canvas: document.getElementById('catwhoknows'),
+        canvas: document.getElementById('catwhoknowsCanvas'),
         artboard: 'catwhoknows',
         stateMachines: ['State Machine 1'],
         autoplay: true,
