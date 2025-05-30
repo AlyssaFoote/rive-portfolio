@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>North by North Pole Rive Demo</title>
+    <style>
+      body {
+        margin: 0;
+        background: #111;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+      canvas {
+        width: 430px;
+        height: 932px;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="northpoleCanvas" width="430" height="932"></canvas>
+
+    <script src="https://unpkg.com/@rive-app/canvas@2.9.1"></script>
+    <script>
+      const rive = new Rive({
+        src: 'PATH/TO/YOUR-FILE.riv', // <- Replace with your hosted .riv file
+        canvas: document.getElementById('northpoleCanvas'),
+        artboard: 'northbynorthpole',
+        stateMachines: ['State Machine 1'],
+        autoplay: true,
+        onLoad: () => {
+          console.log('✅ Rive loaded');
+        },
+        onStateChange: (event) => {
+          console.log('State changed:', event.data);
+        },
+      });
+    </script>
+  </body>
+</html>
