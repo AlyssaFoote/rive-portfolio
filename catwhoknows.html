@@ -31,6 +31,11 @@
     <canvas id="catwhoknows" width="500" height="500"></canvas>
 
     <script>
+      const canvas = document.getElementById('catwhoknows');
+      let riveInstance;
+      let riveInputs = [];
+
+      // ✅ Names of all inputs that should toggle on hover
       const hoverInputs = [
         'crystalball',
         'follow',
@@ -40,36 +45,46 @@
         'lid',
       ];
 
-      const canvas = document.getElementById('catwhoknows');
-
-      const rive1 = new rive.Rive({
+      // ✅ Load Rive and store inputs
+      riveInstance = new rive.Rive({
         src: 'portfolio_game_dev.riv',
         canvas: canvas,
         artboard: 'catwhoknows',
         stateMachines: ['State Machine 1'],
         autoplay: true,
         onLoad: () => {
-          rive1.resizeDrawingSurfaceToCanvas();
-
-          canvas.addEventListener('mouseenter', () => {
-            console.log('Hovering!');
-            hoverInputs.forEach((name) => {
-              const input = rive1
-                .stateMachineInputs('State Machine 1')
-                ?.find((i) => i.name === name);
-              if (input?.type === 'boolean') input.value = true;
-            });
-          });
-
-          canvas.addEventListener('mouseleave', () => {
-            hoverInputs.forEach((name) => {
-              const input = rive1
-                .stateMachineInputs('State Machine 1')
-                ?.find((i) => i.name === name);
-              if (input?.type === 'boolean') input.value = false;
-            });
-          });
+          console.log('✅ Rive loaded');
+          riveInstance.resizeDrawingSurfaceToCanvas();
+          riveInputs = riveInstance.stateMachineInputs('State Machine 1');
         },
+      });
+
+      // ✅ Helper to get an input by name
+      function getInput(name) {
+        return riveInputs.find((input) => input.name === name);
+      }
+
+      // ✅ Hover in: turn all relevant booleans ON
+      canvas.addEventListener('mouseenter', () => {
+        console.log('🟢 Hovering!');
+        hoverInputs.forEach((name) => {
+          const input = getInput(name);
+          if (input?.type === 'boolean') input.value = true;
+        });
+      });
+
+      // ✅ Hover out: turn them OFF
+      canvas.addEventListener('mouseleave', () => {
+        console.log('⚪ Hover out');
+        hoverInputs.forEach((name) => {
+          const input = getInput(name);
+          if (input?.type === 'boolean') input.value = false;
+        });
+      });
+
+      // ✅ Resize canvas on window resize for crisp visuals
+      window.addEventListener('resize', () => {
+        if (riveInstance) riveInstance.resizeDrawingSurfaceToCanvas();
       });
     </script>
   </body>
