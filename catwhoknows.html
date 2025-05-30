@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Rive Portfolio – The Cat Who Knows</title>
+    <script src="https://unpkg.com/@rive-app/webgl@2.9.1"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #000e5b;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      canvas {
+        display: block;
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        background-color: #000e5b;
+        border-radius: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="catwhoknows" width="500" height="500"></canvas>
+
+    <script>
+      const canvas = document.getElementById('catwhoknows');
+
+      const rive1 = new rive.Rive({
+        src: 'portfolio_game_dev.riv', // Update with correct file path
+        canvas: canvas,
+        artboard: 'catwhoknows', // Ensure this matches your Rive file
+        stateMachines: ['State Machine 1'],
+        autoplay: true,
+        onLoad: () => {
+          rive1.resizeDrawingSurfaceToCanvas();
+        },
+      });
+
+      const hoverInputs = [
+        'crystalball',
+        'follow',
+        'boop',
+        'cheek',
+        'nose',
+        'lid',
+      ];
+
+      canvas.addEventListener('mouseenter', () => {
+        hoverInputs.forEach((name) => {
+          const input = rive1
+            .stateMachineInputs('State Machine 1')
+            .find((i) => i.name === name);
+          if (input?.type === 'boolean') input.value = true;
+        });
+      });
+
+      canvas.addEventListener('mouseleave', () => {
+        hoverInputs.forEach((name) => {
+          const input = rive1
+            .stateMachineInputs('State Machine 1')
+            .find((i) => i.name === name);
+          if (input?.type === 'boolean') input.value = false;
+        });
+      });
+    </script>
+  </body>
+</html>
