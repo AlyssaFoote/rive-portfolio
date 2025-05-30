@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rive Portfolio – Cat Who Knows</title>
     <script src="https://unpkg.com/@rive-app/canvas@2.9.1"></script>
     <style>
@@ -31,12 +32,11 @@
     <canvas id="catwhoknows" width="500" height="500"></canvas>
 
     <script>
-      const canvas = document.getElementById('catwhoknows');
       let hoverInput;
 
       const riveInstance = new Rive({
         src: 'portfolio_game_dev.riv',
-        canvas: canvas,
+        canvas: document.getElementById('catwhoknows'),
         artboard: 'catwhoknows',
         stateMachines: ['State Machine 1'],
         autoplay: true,
