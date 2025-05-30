@@ -33,17 +33,6 @@
     <script>
       const canvas = document.getElementById('catwhoknows');
 
-      const rive1 = new rive.Rive({
-        src: 'portfolio_game_dev.riv', // Update with correct file path
-        canvas: canvas,
-        artboard: 'catwhoknows', // Ensure this matches your Rive file
-        stateMachines: ['State Machine 1'],
-        autoplay: true,
-        onLoad: () => {
-          rive1.resizeDrawingSurfaceToCanvas();
-        },
-      });
-
       const hoverInputs = [
         'crystalball',
         'follow',
@@ -53,22 +42,34 @@
         'lid',
       ];
 
-      canvas.addEventListener('mouseenter', () => {
-        hoverInputs.forEach((name) => {
-          const input = rive1
-            .stateMachineInputs('State Machine 1')
-            .find((i) => i.name === name);
-          if (input?.type === 'boolean') input.value = true;
-        });
-      });
+      const rive1 = new rive.Rive({
+        src: 'portfolio_game_dev.riv',
+        canvas: canvas,
+        artboard: 'catwhoknows',
+        stateMachines: ['State Machine 1'],
+        autoplay: true,
+        onLoad: () => {
+          rive1.resizeDrawingSurfaceToCanvas();
 
-      canvas.addEventListener('mouseleave', () => {
-        hoverInputs.forEach((name) => {
-          const input = rive1
-            .stateMachineInputs('State Machine 1')
-            .find((i) => i.name === name);
-          if (input?.type === 'boolean') input.value = false;
-        });
+          canvas.addEventListener('mouseenter', () => {
+            console.log('Hovering!');
+            hoverInputs.forEach((name) => {
+              const input = rive1
+                .stateMachineInputs('State Machine 1')
+                ?.find((i) => i.name === name);
+              if (input?.type === 'boolean') input.value = true;
+            });
+          });
+
+          canvas.addEventListener('mouseleave', () => {
+            hoverInputs.forEach((name) => {
+              const input = rive1
+                .stateMachineInputs('State Machine 1')
+                ?.find((i) => i.name === name);
+              if (input?.type === 'boolean') input.value = false;
+            });
+          });
+        },
       });
     </script>
   </body>
