@@ -34,9 +34,11 @@
     <script>
       let hoverInput;
 
+      const canvas = document.getElementById('catwhoknowsCanvas');
+
       const riveInstance = new rive.Rive({
         src: 'portfolio_game_dev.riv',
-        canvas: document.getElementById('catwhoknowsCanvas'),
+        canvas: canvas,
         artboard: 'catwhoknows',
         stateMachines: ['State Machine 1'],
         autoplay: true,
