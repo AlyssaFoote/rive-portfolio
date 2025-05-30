@@ -4,28 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>North by North Pole Rive Demo</title>
+    <script src="https://unpkg.com/@rive-app/canvas@2.9.1"></script>
     <style>
       body {
         margin: 0;
-        background: #111;
+        background: #ffffff;
         display: flex;
         align-items: center;
         justify-content: center;
         height: 100vh;
       }
       canvas {
-        width: 430px;
-        height: 932px;
-        border: 1px solid #ccc;
+        width: 500px;
+        height: 500px;
+        cursor: pointer;
       }
     </style>
   </head>
   <body>
-    <canvas id="northpoleCanvas" width="430" height="932"></canvas>
+    <canvas id="northpoleCanvas" width="500" height="500"></canvas>
 
-    <script src="https://unpkg.com/@rive-app/canvas@2.9.1"></script>
     <script>
-      const rive = new Rive({
+      let hoverInput;
+
+      const riveInstance = new rive.Rive({
         src: 'portfolio_game_dev.riv',
         canvas: document.getElementById('northpoleCanvas'),
         artboard: 'northbynorthpole',
@@ -33,10 +35,31 @@
         autoplay: true,
         onLoad: () => {
           console.log('✅ Rive loaded');
+
+          // Retrieve the hover input
+          const inputs = riveInstance.stateMachineInputs('State Machine 1');
+          hoverInput = inputs.find((i) => i.name === 'hover');
+          console.log('🧠 Inputs:', inputs);
         },
         onStateChange: (event) => {
-          console.log('State changed:', event.data);
+          console.log('🔁 State changed:', event.data);
         },
+      });
+
+      const canvas = document.getElementById('northpoleCanvas');
+
+      canvas.addEventListener('mouseenter', () => {
+        if (hoverInput && hoverInput.type === 'boolean') {
+          hoverInput.value = true;
+          console.log('🖱️ Hover: ON');
+        }
+      });
+
+      canvas.addEventListener('mouseleave', () => {
+        if (hoverInput && hoverInput.type === 'boolean') {
+          hoverInput.value = false;
+          console.log('🖱️ Hover: OFF');
+        }
       });
     </script>
   </body>
