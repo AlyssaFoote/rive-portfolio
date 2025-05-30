@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Rive Portfolio – The Cat Who Knows</title>
+    <title>Rive Portfolio</title>
     <script src="https://unpkg.com/@rive-app/webgl@2.9.1"></script>
     <style>
       html,
@@ -31,8 +31,6 @@
     <canvas id="catwhoknows" width="500" height="500"></canvas>
 
     <script>
-      const canvas = document.getElementById('catwhoknows');
-
       const hoverInputs = [
         'crystalball',
         'follow',
@@ -44,7 +42,7 @@
 
       const rive1 = new rive.Rive({
         src: 'portfolio_game_dev.riv',
-        canvas: canvas,
+        canvas: document.getElementById('catwhoknows'),
         artboard: 'catwhoknows',
         stateMachines: ['State Machine 1'],
         autoplay: true,
