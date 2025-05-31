@@ -3,38 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rive Portfolio – Cat Who Knows</title>
+    <title>Rive Input Debugger</title>
     <script src="https://unpkg.com/@rive-app/canvas@2.9.1"></script>
     <style>
-      html,
       body {
-        margin: 0;
-        padding: 0;
-        background-color: #000e5b;
+        font-family: sans-serif;
+        background: #000e5b;
+        color: white;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
-        height: 100vh;
+        gap: 1rem;
+        padding: 2rem;
       }
-
       canvas {
-        display: block;
-        width: 100%;
-        max-width: 500px;
-        height: auto;
-        aspect-ratio: 1 / 1;
-        background-color: #000e5b;
-        border-radius: 16px;
+        background: #111;
+        border: 2px solid #fff;
+        border-radius: 12px;
+      }
+      button {
+        margin: 4px;
+        padding: 8px 12px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background: #fff;
+        color: #000e5b;
+        cursor: pointer;
       }
     </style>
   </head>
   <body>
-    <canvas id="catwhoknowsCanvas" width="500" height="500"></canvas>
+    <h1>🎯 Rive Input Debugger</h1>
+    <canvas id="riveCanvas" width="500" height="500"></canvas>
+    <div id="inputControls">Loading inputs...</div>
 
     <script>
-      let hoverInput;
+      const canvas = document.getElementById('riveCanvas');
+      const inputControls = document.getElementById('inputControls');
 
-      const canvas = document.getElementById('catwhoknowsCanvas');
+      let inputs = [];
 
       const riveInstance = new rive.Rive({
         src: 'portfolio_game_dev.riv',
@@ -44,36 +52,43 @@
         autoplay: true,
         onLoad: () => {
           console.log('✅ Rive loaded');
+
           riveInstance.resizeDrawingSurfaceToCanvas();
 
-          const inputs = riveInstance.stateMachineInputs('State Machine 1');
-          console.log('🧠 Available inputs:', inputs);
+          inputs = riveInstance.stateMachineInputs('State Machine 1');
+          console.log('🔍 Found Inputs:', inputs);
 
-          hoverInput = inputs.find((i) => i.name === 'hover');
-          if (!hoverInput) {
-            console.warn(
-              '⚠️ No input named "hover" found in the state machine.'
-            );
+          if (inputs.length === 0) {
+            inputControls.textContent =
+              '❌ No inputs found in this state machine.';
+            return;
           }
+
+          inputControls.innerHTML = '<h3>🎛 Trigger Inputs:</h3>';
+
+          inputs.forEach((input) => {
+            const btn = document.createElement('button');
+            btn.textContent = `${input.name} (${input.type})`;
+
+            if (input.type === 'boolean') {
+              btn.addEventListener('click', () => {
+                input.value = !input.value;
+                btn.textContent = `${input.name}: ${input.value}`;
+              });
+            } else if (input.type === 'trigger') {
+              btn.addEventListener('click', () => {
+                input.fire();
+              });
+            } else if (input.type === 'number') {
+              btn.addEventListener('click', () => {
+                input.value = (input.value + 1) % 5;
+                btn.textContent = `${input.name}: ${input.value}`;
+              });
+            }
+
+            inputControls.appendChild(btn);
+          });
         },
-      });
-
-      canvas.addEventListener('mouseenter', () => {
-        if (hoverInput && hoverInput.type === 'boolean') {
-          hoverInput.value = true;
-          console.log('🟢 Hover ON');
-        }
-      });
-
-      canvas.addEventListener('mouseleave', () => {
-        if (hoverInput && hoverInput.type === 'boolean') {
-          hoverInput.value = false;
-          console.log('⚪ Hover OFF');
-        }
-      });
-
-      window.addEventListener('resize', () => {
-        if (riveInstance) riveInstance.resizeDrawingSurfaceToCanvas();
       });
     </script>
   </body>
