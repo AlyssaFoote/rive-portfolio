@@ -36,7 +36,7 @@
 
       const canvas = document.getElementById('catwhoknowsCanvas');
 
-      const riveInstance = new rive.Rive({
+      const riveInstance = new Rive({
         src: 'cat_who_knows.riv',
         canvas: canvas,
         artboard: 'catwhoknows',
@@ -47,8 +47,14 @@
           riveInstance.resizeDrawingSurfaceToCanvas();
 
           const inputs = riveInstance.stateMachineInputs('State Machine 1');
+          console.log('🧠 Available inputs:', inputs);
+
           hoverInput = inputs.find((i) => i.name === 'hover');
-          console.log('🧠 Inputs:', inputs);
+          if (!hoverInput) {
+            console.warn(
+              '⚠️ No input named "hover" found in the state machine.'
+            );
+          }
         },
       });
 
