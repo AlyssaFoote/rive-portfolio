@@ -32,7 +32,7 @@
     <canvas id="northpoleCanvas" width="500" height="500"></canvas>
 
     <script>
-      let hoverInput;
+      let clickInput;
 
       const riveInstance = new rive.Rive({
         src: 'portfolio_game_dev.riv',
@@ -43,10 +43,15 @@
         onLoad: () => {
           console.log('✅ Rive loaded');
 
-          // Retrieve the hover input
+          // Get all inputs
           const inputs = riveInstance.stateMachineInputs('State Machine 1');
-          hoverInput = inputs.find((i) => i.name === 'hover');
           console.log('🧠 Inputs:', inputs);
+
+          // Find the one named "click"
+          clickInput = inputs.find((i) => i.name === 'click');
+          if (!clickInput) {
+            console.warn('❌ No input named "click" found.');
+          }
         },
         onStateChange: (event) => {
           console.log('🔁 State changed:', event.data);
@@ -55,17 +60,15 @@
 
       const canvas = document.getElementById('northpoleCanvas');
 
-      canvas.addEventListener('mouseenter', () => {
-        if (hoverInput && hoverInput.type === 'boolean') {
-          hoverInput.value = true;
-          console.log('🖱️ Hover: ON');
-        }
-      });
+      canvas.addEventListener('click', () => {
+        if (!clickInput) return;
 
-      canvas.addEventListener('mouseleave', () => {
-        if (hoverInput && hoverInput.type === 'boolean') {
-          hoverInput.value = false;
-          console.log('🖱️ Hover: OFF');
+        if (clickInput.type === 'trigger') {
+          clickInput.fire();
+          console.log('🎯 Click trigger fired!');
+        } else if (clickInput.type === 'boolean') {
+          clickInput.value = !clickInput.value;
+          console.log(`🔁 Click toggled: ${clickInput.value}`);
         }
       });
     </script>
