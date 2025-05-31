@@ -3,46 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rive Input Debugger</title>
+    <title>Cat Who Knows – Rive Animation</title>
     <script src="https://unpkg.com/@rive-app/canvas"></script>
     <style>
+      html,
       body {
-        font-family: sans-serif;
-        background: #000e5b;
-        color: white;
+        margin: 0;
+        padding: 0;
+        background-color: #000e5b;
         display: flex;
-        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        gap: 1rem;
-        padding: 2rem;
+        height: 100vh;
       }
+
       canvas {
-        background: #111;
-        border: 2px solid #fff;
-        border-radius: 12px;
-      }
-      button {
-        margin: 4px;
-        padding: 8px 12px;
-        font-size: 1rem;
-        border: none;
-        border-radius: 8px;
-        background: #fff;
-        color: #000e5b;
-        cursor: pointer;
+        display: block;
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        background-color: #000e5b;
+        border-radius: 16px;
       }
     </style>
   </head>
   <body>
-    <h1>🎯 Rive Input Debugger</h1>
-    <canvas id="riveCanvas" width="500" height="500"></canvas>
-    <div id="inputControls">Loading inputs...</div>
+    <canvas id="catwhoknowsCanvas" width="500" height="500"></canvas>
 
     <script>
-      const canvas = document.getElementById('riveCanvas');
-      const inputControls = document.getElementById('inputControls');
-
-      let inputs = [];
+      const canvas = document.getElementById('catwhoknowsCanvas');
 
       const riveInstance = new rive.Rive({
         src: 'portfolio_game_dev.riv',
@@ -51,44 +41,12 @@
         stateMachines: ['State Machine 1'],
         autoplay: true,
         onLoad: () => {
-          console.log('✅ Rive loaded');
-
           riveInstance.resizeDrawingSurfaceToCanvas();
-
-          inputs = riveInstance.stateMachineInputs('State Machine 1');
-          console.log('🔍 Found Inputs:', inputs);
-
-          if (inputs.length === 0) {
-            inputControls.textContent =
-              '❌ No inputs found in this state machine.';
-            return;
-          }
-
-          inputControls.innerHTML = '<h3>🎛 Trigger Inputs:</h3>';
-
-          inputs.forEach((input) => {
-            const btn = document.createElement('button');
-            btn.textContent = `${input.name} (${input.type})`;
-
-            if (input.type === 'boolean') {
-              btn.addEventListener('click', () => {
-                input.value = !input.value;
-                btn.textContent = `${input.name}: ${input.value}`;
-              });
-            } else if (input.type === 'trigger') {
-              btn.addEventListener('click', () => {
-                input.fire();
-              });
-            } else if (input.type === 'number') {
-              btn.addEventListener('click', () => {
-                input.value = (input.value + 1) % 5;
-                btn.textContent = `${input.name}: ${input.value}`;
-              });
-            }
-
-            inputControls.appendChild(btn);
-          });
         },
+      });
+
+      window.addEventListener('resize', () => {
+        riveInstance.resizeDrawingSurfaceToCanvas();
       });
     </script>
   </body>
