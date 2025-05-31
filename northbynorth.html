@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>North by North Pole Rive Demo</title>
-    <script src="https://unpkg.com/@rive-app/canvas@2.9.1"></script>
+    <script src="https://unpkg.com/@rive-app/canvas"></script>
     <style>
       html,
       body {
@@ -32,24 +32,31 @@
     <canvas id="northpoleCanvas" width="500" height="500"></canvas>
 
     <script>
-      let clickInput;
+      let ornamentClickInput;
+
+      const canvas = document.getElementById('northpoleCanvas');
+
       const riveInstance = new rive.Rive({
         src: 'portfolio_game_dev.riv',
-        canvas: document.getElementById('northpoleCanvas'),
+        canvas: canvas,
         artboard: 'northbynorthpole',
         stateMachines: ['State Machine 1'],
         autoplay: true,
         onLoad: () => {
           console.log('✅ Rive loaded');
+          riveInstance.resizeDrawingSurfaceToCanvas();
 
-          // Get all inputs
           const inputs = riveInstance.stateMachineInputs('State Machine 1');
-          console.log('🧠 Inputs:', inputs);
+          console.log(
+            '🧠 Inputs:',
+            inputs.map((i) => i.name)
+          );
 
-          // Find the one named "click"
-          clickInput = inputs.find((i) => i.name === 'ornamentClick');
-          if (!clickInput) {
-            console.warn('❌ No input named "click" found.');
+          ornamentClickInput = inputs.find((i) => i.name === 'ornamentClick');
+          if (!ornamentClickInput) {
+            console.warn('❌ No input named "ornamentClick" found.');
+          } else {
+            console.log('✅ ornamentClick input found:', ornamentClickInput);
           }
         },
         onStateChange: (event) => {
@@ -57,17 +64,12 @@
         },
       });
 
-      const canvas = document.getElementById('northpoleCanvas');
-
       canvas.addEventListener('click', () => {
-        if (!clickInput) return;
-
-        if (clickInput.type === 'trigger') {
-          clickInput.fire();
-          console.log('🎯 Click trigger fired!');
-        } else if (clickInput.type === 'boolean') {
-          clickInput.value = !clickInput.value;
-          console.log(`🔁 Click toggled: ${clickInput.value}`);
+        if (ornamentClickInput && ornamentClickInput.fire) {
+          ornamentClickInput.fire();
+          console.log('🎯 ornamentClick trigger fired!');
+        } else {
+          console.warn('⚠️ ornamentClickInput not available or not a trigger.');
         }
       });
     </script>
